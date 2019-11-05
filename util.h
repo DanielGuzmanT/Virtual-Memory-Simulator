@@ -36,8 +36,8 @@ static inline uint virtualAddressToVFN(vaddr_t virtualAddress) {
     return getBits(virtualAddress, addr_space_bits - 1, vfn_bits);
 }
 
-uint log2(uint number);
-uint pow2(uint number);
+uint log2(uint argument);
+uint pow2(uint exponent);
 
 void utilTest();
 
