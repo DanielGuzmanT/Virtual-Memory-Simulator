@@ -62,8 +62,8 @@ static long optionsAtoi(const char *argument);
 static void optionsPrintHelp();
 static void optionsPrintVersion();
 static char *longOpt(char *longoptHelp);
-static char *_zlibhelp();
-static void _algorithmHelp();
+static char *showIfZlibAvailable();
+static void listAlgorithmsHelp();
 
 /* FUNCIONES PROPIAS */
 static void optionsHandleArgumentsValidation();
@@ -236,7 +236,7 @@ void optionsPrintHelp() {
     printf("\n");
     printf("ALGORITHM specifies the fault handler, and should be one of:\n");
 
-    _algorithmHelp();
+    listAlgorithmsHelp();
 
     printf("\n");
     printf("Options:\n");
@@ -272,11 +272,16 @@ char *_longopt(char *longoptHelp) {
 }
 */
 
-char *_zlibhelp() {
-    return NULL;
+char *showIfZlibAvailable() {
+    return "";
+    #ifdef HAVE_LIBZ
+        return "Zlib is available; input may be compressed.\n";
+    #else
+        return "Zlib not available; input must be compressed.\nInstall Zlib (www.zlib.org) and rerun ./configure to add support.\n";
+    #endif
 }
 
-void _algorithmHelp() {
+void listAlgorithmsHelp() {
     fault_handler_info_t *algorithm;
     printf("   ");
     for (algorithm=foult_handlers; algorithm->name != NULL; algorithm++) {
