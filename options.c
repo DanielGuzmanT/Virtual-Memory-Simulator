@@ -61,7 +61,7 @@ static void optionsHandleAlgorithm(const char *algorithmName);
 static long optionsAtoi(const char *argument);
 static void optionsPrintHelp();
 static void optionsPrintVersion();
-static char *_longopt(char *longOptHelp);
+static char *longOpt(char *longoptHelp);
 static char *_zlibhelp();
 static void _algorithmHelp();
 
@@ -230,19 +230,58 @@ void optionsPrintVersion() {
 }
 
 void optionsPrintHelp() {
+    printf("Usage: vmsim [OPTIONS] ALGORITHM [TRACEFILE|-]\n");
+    printf("Process TRACEFILE, simulating a VM system. Reports stats on paging behavior.\n");
+    printf("If TRACEFILE is not specified or is '-', input will be taken from stdin.\n");
+    printf("\n");
+    printf("ALGORITHM specifies the fault handler, and should be one of:\n");
 
+    _algorithmHelp();
+
+    printf("\n");
+    printf("Options:\n");
+    printf("-h%-26s Print this message and exit.\n"                     , longOpt("|--help"));
+    printf("-V%-26s Print the version information.\n"                   , longOpt("|--version"));
+    printf("-v%-26s Verbose output. Includes progress output.\n"        , longOpt("|--verbose"));
+    printf("-t%-26s Run self tests.\n"                                  , longOpt("|--test"));
+    printf("-o FILE %-20s Append statistics output to the given file.\n", longOpt("|--output=FILE"));
+    printf("-l REFS %-20s Stop after first REFS refs.\n"                , longOpt("|--limit=REFS"));
+    printf("-p PAGES%-20s Simulate PAGES physical pages.\n"             , longOpt("|--pages=PAGES"));
+    printf("%-28s Minimum value %d.\n"                                  , " ", MIN_PHYS_PAGES);
+    printf("-s SIZE %-20s Simulate a page size of SIZE bytes.\n"        , longOpt("|--size=SIZE"));
+    printf("%-28s Size must be a power of 2.\n"                         , " ");
 }
 
-char *_longopt(char *longOptHelp) {
-    return NULL;
+char *longOpt(char *longoptHelp) {
+    #ifdef HAVE_GETOPT_LONG
+        return longoptHelp;
+    #else
+        return " ";
+    #endif
 }
+/*
+char *_longopt(char *longoptHelp) {
+    #ifdef HAVE_GETOPT_LONG
+        return longoptHelp;
+    #else
+        // duplicar la opción larga y cambiar cada caracter por un espacio en blanco
+        char *spaces = strdup(longoptHelp);
+        for (char *i=spaces; *i; i++) *i = ' ';
+        return spaces;
+    #endif
+}
+*/
 
 char *_zlibhelp() {
     return NULL;
 }
 
 void _algorithmHelp() {
-
+    fault_handler_info_t *algorithm;
+    printf("   ");
+    for (algorithm=foult_handlers; algorithm->name != NULL; algorithm++) {
+        printf("%s%s", algorithm->name, (algorithm+1)->name ? ", " : "\n");
+    }
 }
 
 
