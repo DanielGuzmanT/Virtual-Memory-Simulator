@@ -27,16 +27,17 @@
 #endif
 
 /* De K&R, 2nd Ed., pg. 49: obtener los n bits desde la posición p */
-static inline unit getBits(uint bitschain, int position, int nbits) {
+static inline uint getBits(uint bitschain, int position, int nbits) {
     return bitschain >> (position + 1 - nbits) & ~(~0 << nbits);
 }
 
+// TODO(1): ¿Qué significa VFN?
 static inline uint virtualAddressToVFN(vaddr_t virtualAddress) {
     return getBits(virtualAddress, addr_space_bits - 1, vfn_bits);
 }
 
 uint log2(uint number);
-unit pow2(uint number);
+uint pow2(uint number);
 
 void utilTest();
 
