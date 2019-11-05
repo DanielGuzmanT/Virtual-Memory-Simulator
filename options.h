@@ -5,4 +5,22 @@
 #ifndef VMSIM_OPTIONS_H
 #define VMSIM_OPTIONS_H
 
+#include "vmsim.h"
+#include "fault.h"
+
+typedef struct _opts {
+    bool_t verbose;
+    bool_t test;
+    int pageSize;
+    int physicalPages;
+    long limit;
+    char *outputFile;
+    char *inputFile;
+    fault_handler_into_f *faultHandler;
+} opts_t;
+
+extern opts_t chosenopts;
+
+void processOptions(int argc, char **argv);
+
 #endif //VMSIM_OPTIONS_H
