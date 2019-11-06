@@ -203,7 +203,7 @@ long optionsAtoi(const char *argument) {
 void optionsHandleAlgorithm(const char *algorithmName) {
     // búsqueda del algoritmo escogido usando el nombre ingresado
     fault_handler_info_t *algorithm;
-    for (algorithm=fault_handlers; algorithm->name != NULL; algorithm++) {
+    for (algorithm=faultHandlers; algorithm->name != NULL; algorithm++) {
         if (strcmp(algorithm->name, algorithmName) == 0) break;
     }
 
