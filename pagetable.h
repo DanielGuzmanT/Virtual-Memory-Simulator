@@ -11,17 +11,19 @@
 const static int pagesize = 4096;
 const static log_pagesize = 12;
 
-/* pte significa Page Table Entry, entrada de tabla de páginas */
+/* pte significa Page Table Entry, entrada de tabla de páginas 
+ * https://www.geeksforgeeks.org/page-table-entries-in-page-table/
+ * */
 typedef struct _pte {
-    uint    vfn;        // número de frames virtuales (Virtual Frame Number)
-    uint    pfn;        // número de frames físicos (Physical Frame Number) if valid=1
-    int     reference;
-    bool_t  valid;      // Verdadero si esta , de otra manera Falso
-    bool_t  modified;
+    uint    vfn;        // el número del frame virtual (Virtual Frame Number)
+    uint    pfn;        // el número del frame físico (Physical Frame Number) if valid=1
+    int     reference;  // si ha sido accedidad en el último ciclo de reloj o no. 1 si la pág. es accedida
+    bool_t  valid;      // Verdadero si esta en la memoria física, de otra manera Falso (fault page)
+    bool_t  modified;   // Limpio o sucio. Se vuelve a guardar con los cambios hechos si está sucia-modificada (evita escribir en intercambio a disco duro)
     int     counter;    // usado por LRU, FIFO
 } pte_t;
 
-void pagetable_init();
+void pagetableInit();
 
 /* Prestar atención a la Entrada de Tabla de Página (pte) para la página virtual dada.
  * Si la página no está en memoria, se seteará la variable 'valid'==0.
@@ -29,10 +31,10 @@ void pagetable_init();
  * pte_t con el 'vfn' dado y 'valid'==0.
  * variable 'type'
  * */
-pte_t *pagetable_lookup_vaddr(uint vfn, ref_kind_t type);
+pte_t *pagetableLookupVirtualAddress(uint vfn, ref_kind_t type);
 
-void pagetable_test();
+void pagetableTest();
 
-void pagetable_dump();
+void pagetableDump();
 
 #endif //VMSIM_PAGETABLE_H
