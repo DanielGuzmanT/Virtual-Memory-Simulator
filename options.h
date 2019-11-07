@@ -16,7 +16,7 @@ typedef struct _opts {
     long limit;
     char *outputFile;
     char *inputFile;
-    fault_handler_into_f *faultHandler;
+    fault_handler_info_t *faultHandler;
 } opts_t;
 
 extern opts_t chosenopts;
