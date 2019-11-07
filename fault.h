@@ -12,9 +12,8 @@
 typedef void (*fault_handler_t) (pte_t *pte, ref_kind_t type);
 
 /* Fault Handlers son funciones que no retornan nada (void) y toman 2 argumentos:
- * - pte_t*
- * - ref_kind_t
- *
+ * - pte_t*     => es la nueva página que debe ser insertada
+ * - ref_kind_t => es para el reporte estadístico
  * */
 typedef struct _fault_handler_info {
     char *name;
