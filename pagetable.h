@@ -13,12 +13,12 @@ const static log_pagesize = 12;
 
 /* pte significa Page Table Entry, entrada de tabla de páginas */
 typedef struct _pte {
-    uint    vfn;
-    uint    pfn;
+    uint    vfn;        // número de frames virtuales (Virtual Frame Number)
+    uint    pfn;        // número de frames físicos (Physical Frame Number) if valid=1
     int     reference;
-    bool_t  valid;
+    bool_t  valid;      // Verdadero si esta , de otra manera Falso
     bool_t  modified;
-    int     counter;
+    int     counter;    // usado por LRU, FIFO
 } pte_t;
 
 void pagetable_init();
