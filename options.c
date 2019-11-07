@@ -66,7 +66,7 @@ static char *showIfZlibAvailable();
 static void listAlgorithmsHelp();
 
 /* FUNCIONES PROPIAS */
-static void optionsHandleArgumentsValidation();
+static void optionsHandleArgumentsValidation(int argc);
 static void optionsHandleInputFileArgument(int argc, char **argv);
 static void optionsHandleOutputFileArgument();
 
@@ -90,7 +90,7 @@ void processOptions(int argc, char **argv) {
      * Info de cómo funciona getopt():
      * https://www.geeksforgeeks.org/getopt-function-in-c-to-parse-command-line-arguments/ */
     while (TRUE) {
-        option = GETOPT(argc, argv);
+        option = GETOPT(argc, argv)
         if (option == -1) break;
 
         switch (option) {
@@ -120,7 +120,7 @@ void processOptions(int argc, char **argv) {
     }
 
     // función propia, para mayor orden dentro de esta función principal de la librería options.h
-    optionsHandleArgumentsValidation();
+    optionsHandleArgumentsValidation(argc);
 
     // optind, a estas alturas, apunta al último argumento, el cual es el nombre del algoritmo a usar
     optionsHandleAlgorithm(argv[optind]);
@@ -132,7 +132,7 @@ void processOptions(int argc, char **argv) {
     optionsHandleOutputFileArgument();
 }
 
-void optionsHandleArgumentsValidation() {
+void optionsHandleArgumentsValidation(int argc) {
     if (chosenopts.limit < 0) {
         fprintf(stderr, "[ERROR-OPTIONS]: límite debe ser > 0\n");
         exit(1);
@@ -284,7 +284,7 @@ char *showIfZlibAvailable() {
 void listAlgorithmsHelp() {
     fault_handler_info_t *algorithm;
     printf("   ");
-    for (algorithm=foult_handlers; algorithm->name != NULL; algorithm++) {
+    for (algorithm=faultHandlers; algorithm->name != NULL; algorithm++) {
         printf("%s%s", algorithm->name, (algorithm+1)->name ? ", " : "\n");
     }
 }
