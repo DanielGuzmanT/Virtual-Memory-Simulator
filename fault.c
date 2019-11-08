@@ -34,7 +34,7 @@ void faultInit() {
 /* =================== IMPLEMENTACIÓN DE ALGORITMOS =================== */
 
 void faultRandom(pte_t *pte, ref_kind_t type) {
-    int frame = (int)(random() % chosenopts.physicalPages);
+    int frame = (int)(random() % chosenOpts.physicalPages);
     // physmem_evict(frame, type);
     // physmem_load(frame, pte, type);
 }

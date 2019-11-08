@@ -33,11 +33,11 @@ static inline uint getBits(uint bitschain, int position, int nbits) {
 
 // TODO(1): ¿Qué significa VFN?
 static inline uint virtualAddressToVFN(vaddr_t virtualAddress) {
-    return getBits(virtualAddress, addr_space_bits - 1, vfn_bits);
+    return getBits(virtualAddress, addressSpaceBits - 1, vfnBits);
 }
 
-uint log2(uint argument);
-uint pow2(uint exponent);
+uint log_2(uint argument);
+uint pow_2(uint exponent);
 
 void utilTest();
 

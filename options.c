@@ -30,7 +30,7 @@
 
 /* Estructura de opciones globales, la función processOptions()
  * colocará los valores ingresados por consola en la estructura */
-opts_t chosenopts;
+opts_t chosenOpts;
 
 static const char *shortopts = "hvtVp:s:l:o:";
 
@@ -70,18 +70,18 @@ static void optionsHandleInputFileArgument(int argc, char **argv);
 static void optionsHandleOutputFileArgument();
 
 /* Procesa el arreglo argc/argv, actualizando la estructura global
- * de opciones 'chosenopts'*/
+ * de opciones 'chosenOpts'*/
 void processOptions(int argc, char **argv) {
     int option;
     int help = FALSE, version = FALSE;
 
-    chosenopts.outputFile    = NULL;
-    chosenopts.inputFile     = NULL;
-    chosenopts.verbose       = FALSE;
-    chosenopts.test          = FALSE;
-    chosenopts.pageSize      = 1024;
-    chosenopts.physicalPages = 128;
-    chosenopts.limit         = 0;
+    chosenOpts.outputFile    = NULL;
+    chosenOpts.inputFile     = NULL;
+    chosenOpts.verbose       = FALSE;
+    chosenOpts.test          = FALSE;
+    chosenOpts.pageSize      = 1024;
+    chosenOpts.physicalPages = 128;
+    chosenOpts.limit         = 0;
 
     /* macros GETOPT obtiene la clave de la opción ingresada como argumentos en la línea de comandos,
      * de acuerdo a los caracteres entregados en la variable global 'shortopts'. Si no hay más argumentos
@@ -95,12 +95,12 @@ void processOptions(int argc, char **argv) {
         switch (option) {
             case 'h': help = TRUE; break;
             case 'V': version = TRUE; break;
-            case 'v': chosenopts.verbose = TRUE; break;
-            case 'o': chosenopts.outputFile = optarg; break;
-            case 'l': chosenopts.limit = optionsAtoi(optarg); break;
-            case 't': chosenopts.test = TRUE;
-            case 'p': chosenopts.physicalPages = (int)optionsAtoi(optarg); break;
-            case 's': chosenopts.pageSize = (int)optionsAtoi(optarg); break;
+            case 'v': chosenOpts.verbose = TRUE; break;
+            case 'o': chosenOpts.outputFile = optarg; break;
+            case 'l': chosenOpts.limit = optionsAtoi(optarg); break;
+            case 't': chosenOpts.test = TRUE;
+            case 'p': chosenOpts.physicalPages = (int)optionsAtoi(optarg); break;
+            case 's': chosenOpts.pageSize = (int)optionsAtoi(optarg); break;
             case '?': help = TRUE; break;
             default:
                 printf("'getopt' retornó '%c' - opción no manejable\n", option);
@@ -132,21 +132,21 @@ void processOptions(int argc, char **argv) {
 }
 
 void optionsHandleArgumentsValidation(int argc) {
-    if (chosenopts.limit < 0) {
+    if (chosenOpts.limit < 0) {
         fprintf(stderr, "[ERROR-OPTIONS]: límite debe ser > 0\n");
         exit(1);
     }
 
-    if (chosenopts.physicalPages < MIN_PHYS_PAGES) {
+    if (chosenOpts.physicalPages < MIN_PHYS_PAGES) {
         fprintf(stderr, "[ERROR-OPTIONS]: número de páginas físicas debe ser al menos %d\n", MIN_PHYS_PAGES);
         exit(1);
     }
 
-    if (chosenopts.pageSize < MIN_PAGESIZE) {
+    if (chosenOpts.pageSize < MIN_PAGESIZE) {
         fprintf(stderr, "[ERROR-OPTIONS]: tamaño de página debe ser al menos %d bytes\n", MIN_PAGESIZE);
         exit(1);
     }
-    if (log2(chosenopts.pageSize) == -1) {
+    if (log_2(chosenOpts.pageSize) == -1) {
         fprintf(stderr, "[ERROR-OPTIONS]: tamaño de la página debe ser potencia de 2\n");
         exit(1);
     }
@@ -167,22 +167,22 @@ void optionsHandleArgumentsValidation(int argc) {
 void optionsHandleInputFileArgument(int argc, char **argv) {
     // si existe un argumento más por leer, es el valor a asignar a la variable archivo de entrada 'inputFile'
     if (optind+1 < argc) {
-        chosenopts.inputFile = argv[optind+1];
+        chosenOpts.inputFile = argv[optind + 1];
     }
 
     // caracter '-' como valor recibido para input file indica que debe ser leído desde la entrada estándar
-    if (chosenopts.inputFile == NULL || strcmp("-", chosenopts.inputFile) == 0) {
-        chosenopts.inputFile = NULL;
-        if (chosenopts.verbose) printf("[INFO -OPTIONS]: leyendo desde entrada estándar (stdin)\n");
+    if (chosenOpts.inputFile == NULL || strcmp("-", chosenOpts.inputFile) == 0) {
+        chosenOpts.inputFile = NULL;
+        if (chosenOpts.verbose) printf("[INFO -OPTIONS]: leyendo desde entrada estándar (stdin)\n");
     }
-    else if (chosenopts.verbose) {
-        printf("[INFO -OPTIONS]: leyendo desde %s\n", chosenopts.inputFile);
+    else if (chosenOpts.verbose) {
+        printf("[INFO -OPTIONS]: leyendo desde %s\n", chosenOpts.inputFile);
     }
 }
 
 void optionsHandleOutputFileArgument() {
-    if (chosenopts.verbose && chosenopts.outputFile) {
-        printf("[INFO -OPTIONS]: enviando salida (output) a %s\n", chosenopts.outputFile);
+    if (chosenOpts.verbose && chosenOpts.outputFile) {
+        printf("[INFO -OPTIONS]: enviando salida (output) a %s\n", chosenOpts.outputFile);
     }
 }
 
@@ -210,11 +210,11 @@ void optionsHandleAlgorithm(const char *algorithmName) {
         fprintf(stderr, "[ERROR-OPTIONS]: No existe ningún algoritmo disponible con el nombre '%s'\n", algorithmName);
         exit(1);
     }
-    else if (chosenopts.verbose) {
+    else if (chosenOpts.verbose) {
         printf("[INFO -OPTIONS]: Usando algoritmo elegido '%s'\n", algorithmName);
     }
 
-    chosenopts.faultHandler = algorithm;
+    chosenOpts.faultHandler = algorithm;
 }
 
 void optionsPrintVersion() {

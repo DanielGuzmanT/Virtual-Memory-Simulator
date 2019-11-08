@@ -27,9 +27,9 @@ typedef enum _ref_kind {
 #define REF_KIND_NUM  3
 
 /* tamaño del espacio de direcciones */
-const static uint addr_space_bits = 16;
-// TODO(4): ¿Qué significa vfn_bits?, ¿virtual frame bits number?
-extern uint vfn_bits;
+const static uint addressSpaceBits = 16;
+// TODO(4): ¿Qué significa vfnBits?, ¿virtual frame bits number?
+extern uint vfnBits;
 // TODO(5): ¿En dónde se usa ref_counter?
 extern int ref_counter;
 

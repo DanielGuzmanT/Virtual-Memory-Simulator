@@ -19,7 +19,7 @@ typedef struct _opts {
     fault_handler_info_t *faultHandler;
 } opts_t;
 
-extern opts_t chosenopts;
+extern opts_t chosenOpts;
 
 void processOptions(int argc, char **argv);
 
