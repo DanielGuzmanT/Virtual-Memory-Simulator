@@ -9,7 +9,7 @@
 
 /* valores por defecto que puedan ser sobrescritos desde la línea de comandos */
 const static int pagesize = 4096;
-const static logPagesize = 12;
+const static int logPagesize = 12;
 
 /* pte significa Page Table Entry, entrada de tabla de páginas 
  * https://www.geeksforgeeks.org/page-table-entries-in-page-table/
