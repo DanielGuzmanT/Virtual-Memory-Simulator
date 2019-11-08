@@ -35,8 +35,8 @@ void faultInit() {
 
 void faultRandom(pte_t *pte, ref_kind_t type) {
     int frame = (int)(random() % chosenOpts.physicalPages);
-    // physmem_evict(frame, type);
-    // physmem_load(frame, pte, type);
+    physicalMemoryEvict(frame, type);
+    physicalMemoryLoad(frame, pte, type);
 }
 
 void faultFifo(pte_t *pte, ref_kind_t type) {
