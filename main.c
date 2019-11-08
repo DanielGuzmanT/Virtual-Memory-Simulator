@@ -1,10 +1,20 @@
 #include <stdio.h>
-#include "util.h"
+#include <stdlib.h>
 
-int main() {
-    printf("Hello, World!\n");
+#include "stats.h"
+#include "options.h"
+#include "vmsim.h"
 
-    utilTest();
+int main(int argc, char **argv) {
+    processOptions(argc, argv);
+    if (chosenOpts.test) {
+        test();
+        printf("[INFO -MAIN]: Tests done\n");
+        exit(0);
+    }
 
+    init();
+    simulate();
+    statsOutput();
     return 0;
 }
