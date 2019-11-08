@@ -145,4 +145,65 @@ pte_t *pagetableLookupHelper(uint vfn, uint bits, uint maskedVFN, pagetable_t *p
     }
 }
 
+pte_t *pagetableNewPTE(uint vfn) {
+    pte_t *pte = (pte_t*)(malloc(sizeof(pte_t)));
+    assert(pte);
+
+    pte->vfn        = vfn;      // vfn guardado en esta nueva entrada de la tabla de página
+    pte->pfn        = -1;       // nueva entrada aún no apunta a una página física
+    pte->valid      = FALSE;    // nueva entrada con pfn=-1 es valid=FALSE, hasta apuntar a una pfn en memoria principal
+    pte->modified   = FALSE;    // nueva entrada lista para apuntar a espacio nuevo (no modificado)
+    pte->reference  = 0;        // nueva entrada no tiene referencias aún
+
+    return pte;
+}
+
+void pagetableTest() {
+    printf("[TEST -PAGETABLE]: Testeando Pagatables...\n");
+    pagetableInit();
+    assert(rootTable);
+
+    if (vfnBits == 22) {
+        pagetableTestEntry(0   , 0, 0   );
+        pagetableTestEntry(1023, 0, 1023);
+        pagetableTestEntry(1024, 1, 0   );
+        pagetableTestEntry((1 << vfnBits) - 1   , levels[0].size-1, levels[1].size-1);
+        pagetableTestEntry((1 << vfnBits) - 2   , levels[0].size-1, levels[1].size-2);
+        pagetableTestEntry((1 << vfnBits) - 1024, levels[0].size-1, 0               );
+        pagetableTestEntry((1 << vfnBits) - 1025, levels[0].size-2, levels[1].size-1);
+    }
+}
+
+void pagetableTestEntry(uint vfn, int l1, int l2) {
+    printf("[TEST -PAGETABLE]: Buscando vfn=%u\n", vfn);
+
+    pte_t *pte = pagetableLookupVirtualAddress(vfn, REF_KIND_CODE);
+    assert(pte && pte->vfn==vfn);
+    assert(rootTable->table[l1]);
+
+    assert(((pagetable_t*)rootTable->table[l1])->table[l2]);
+    assert(((pte_t*)((pagetable_t*)rootTable->table[l1])->table[l2])->vfn == vfn);
+}
+
+void pagetableDump() {
+    assert(rootTable);
+    assert(rootTable->level == 0);
+    uint locaVFNBits = addressSpaceBits - log_2(chosenOpts.pageSize);
+    uint ptSize = pow_2(locaVFNBits);
+
+    printf("[INFO -PAGETABLE]: Campos de Tabla de Páginas actual PTE. valid:vfn:pfn:modified:reference:counter\n");
+    for (uint i=0; i<ptSize; i++) {
+        if (rootTable->table[i]) {
+            pte_t *pte = (pte_t*) rootTable->table[i];
+            printf("[INFO -PAGETABLE]: table[0x%x]:%d:0x%x:0%x:%d:%d:%d\n",
+                    i,
+                    pte->valid,
+                    pte->vfn,
+                    pte->pfn,
+                    pte->modified,
+                    pte->reference,
+                    pte->counter);
+        }
+    }
+}
 /******************************************************************************/
