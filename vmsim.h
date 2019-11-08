@@ -27,6 +27,10 @@ typedef enum _ref_kind {
 /* tamaño del espacio de direcciones */
 const static uint addressSpaceBits = 16;
 extern uint vfnBits;
-extern int ref_counter;
+extern int refCounter;
+
+void init();
+void test();
+void simulate();
 
 #endif //VMSIM_VMSIM_H
